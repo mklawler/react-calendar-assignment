@@ -1,0 +1,46 @@
+{
+    "years" :
+    [
+        {
+            "year" : "2019",
+            "months" :
+            [
+                {
+                    "month" : "1",
+                    "days" :
+                    [
+                        {
+                            "day" : "3",
+                            "note" : "Meeting at Starbucks, 11:30am"
+                        },
+                        {
+                            "day" : "13",
+                            "note" : "Call David"
+                        }
+                    ]
+                },
+                {
+                    "month" : "3",
+                    "days" :
+                    [
+                        {
+                            "day" : "17",
+                            "note" : "St. Patrick's Day"
+                        }
+                    ]
+                },
+                {
+                    "month" : "7",
+                    "days" :
+                    [
+                        {
+                            "day" : "26",
+                            "note" : "Billy Joel Concert, 8pm"
+                        }
+                    ]
+                }
+            ]
+        }
+
+    ]
+}
