@@ -2,7 +2,6 @@
 
 // IMPORTS
 import React, { Component } from 'react';
-import $ from 'jquery';
 import * as global from './global';
 import * as errorHandler from './errors';
 import * as config from './config/config';
@@ -39,10 +38,11 @@ class AssignmentCalendar extends Component {
       global.currentDate = new Date();
 
     // Call monthChange with 0 will set initial date and populate header
-    this.monthChange(0);
+    let result = AssignmentCalendar.monthChange(0);
+    this.monthUpdate(result.month, result.year);
 
     // Retrieve month data from API and populate calendar
-    AssignmentCalendar.fetchMonth(null, this.populateCalendar.bind(this)).catch(err => errorHandler.logError(err.reason)).then();
+    //AssignmentCalendar.fetchMonth(null, this.populateCalendar.bind(this)).catch(err => errorHandler.logError(err.reason)).then();
 
 
   }
@@ -88,7 +88,7 @@ class AssignmentCalendar extends Component {
     // via the API.
 
     // Define some variables we will need as we iterate
-    let calendarBlockClassName, calendarBlockNote, calendarBlockDate;
+    let calendarBlockClassName, calendarBlockNote, calendarBlockDate, inactiveLink;
 
     // We are going to create an array of content that we can then use in our Render method.  This method allows us
     // to dynamically generate content outside of the Render method.
@@ -102,8 +102,17 @@ class AssignmentCalendar extends Component {
 
       // Build contents
       if (month !== firstDayOfMonth.getMonth()) {
+
+        // Make the days outside the month clickable to go back or forward
+        if (calendarDate < firstDayOfMonth) {
+          inactiveLink = this.monthForward.bind(this);
+        }
+        else {
+          inactiveLink = this.monthBack.bind(this);
+        }
+
         calendarBlockClassName = "assignment-calendar-block-inactive";
-        calendarBlockDate = <button className={calendarBlockClassName}>{firstDayOfMonth.getDate()}</button>;
+        calendarBlockDate = <button className={calendarBlockClassName} onClick={inactiveLink} >{firstDayOfMonth.getDate()}</button>;
         calendarBlockNote = null;
       }
       else if ((month === new Date().getMonth()) && (firstDayOfMonth.getDate() < new Date().getDate())) {
@@ -192,27 +201,36 @@ class AssignmentCalendar extends Component {
 
   // Moves entire calendar forward a month
   monthBack() {
-    this.monthChange(-1);
-  }
+    let result = AssignmentCalendar.monthChange(-1);
+    this.monthUpdate(result.month, result.year);
 
+  }
 
 
   // Moves entire calendar backward a month
   monthForward() {
-    this.monthChange(1);
+    let result = AssignmentCalendar.monthChange(1);
+    this.monthUpdate(result.month, result.year);
   }
 
 
-
   // Common method for moving calendar
-  monthChange(months) {
+  static monthChange(months, date) {
 
     // When debugging, note details
     errorHandler.logInfo("monthChange - \nmonths: " + months);
 
+    // Default to global
+    if ((date === undefined) || (date === null))
+      date = global.currentDate;
+
+    // If still undefined, set to today
+    if ((date === undefined) || (date === null))
+      date = new Date();
+
     // Parse month and year and add months
-    let month = global.currentDate.getMonth() + months;
-    let year = global.currentDate.getFullYear();
+    let month = date.getMonth() + months;
+    let year = date.getFullYear();
     if (month < 0) {
       month += 12;
       year--;
@@ -222,11 +240,13 @@ class AssignmentCalendar extends Component {
       year++;
     }
 
-    //TODO: Change to use setMonthYear of child object!!
-    //
+    return { month: month, year: year};
+  }
 
+  // Update date for the calendar and put in header
+  monthUpdate(month, year) {
     // Use the name area const _months to get the name of the month
-    $("#assignment-calendar-month-year").text(_months[month] + ", " + year);
+    this.monthYear = _months[month] + ", " + year;
 
     // Get new date now
     let newDate = new Date(year,month,1);
@@ -235,11 +255,7 @@ class AssignmentCalendar extends Component {
     global.currentDate = newDate;
 
     // If we moved months, hit the API for data for the new date
-    if (months !== 0) {
-      AssignmentCalendar.fetchMonth(newDate, this.populateCalendar.bind(this)).catch(err => errorHandler.logError(err.reason));
-    }
-
-
+    AssignmentCalendar.fetchMonth(newDate, this.populateCalendar.bind(this)).catch(err => errorHandler.logError(err.reason));
   }
 
 
@@ -280,7 +296,7 @@ class AssignmentCalendar extends Component {
 
         <div id="assignment-calendar" className="container">
 
-          <AssignmentCalendarNav monthBack={this.monthBack.bind(this)} monthForward={this.monthForward.bind(this)}/>
+          <AssignmentCalendarNav monthYear={this.monthYear} monthBack={this.monthBack.bind(this)} monthForward={this.monthForward.bind(this)}/>
           <div className="w-100"/>
           <div id="assignment-calendar-grid" className="row">
             <div className="col-1">Sun</div>

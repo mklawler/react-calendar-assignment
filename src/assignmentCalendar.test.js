@@ -80,8 +80,33 @@ test('Fetch Month - Good Result', done => {
 });
 
 
+/* MONTH CHANGE TESTS */
 
+test('Month Change Back', () => {
+    let m = AssignmentCalendar.monthChange(-1,new Date(2019,2,1)).month;
+    expect(m).toEqual(1);
+});
 
+test('Month Change Forward', () => {
+    let m = AssignmentCalendar.monthChange(1,new Date(2019,2,1)).month;
+    expect(m).toEqual(3);
+});
+
+test('Month Change Back Across Year', () => {
+    let y = AssignmentCalendar.monthChange(-1,new Date(2019,0,1)).year;
+    expect(y).toEqual(2018);
+});
+
+test('Month Change Forward Across Year', () => {
+    let y = AssignmentCalendar.monthChange(1,new Date(2018,11,1)).year;
+    expect(y).toEqual(2019);
+});
+
+test('Month Change Undefined', () => {
+    let m = AssignmentCalendar.monthChange(0,undefined).month;
+    let month = new Date().getMonth();
+    expect(m).toEqual(month);
+});
 
 
 

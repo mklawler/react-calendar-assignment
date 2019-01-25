@@ -17,11 +17,6 @@ import React, { Component } from 'react';
  ************************************************************************/
 class AssignmentCalendarNav extends Component {
 
-    //TODO: Start using this approach for updating month and year
-    setMonthYear(monthYear) {
-        this.monthYear = monthYear;
-    }
-
 
     render() {
         return (
@@ -29,7 +24,7 @@ class AssignmentCalendarNav extends Component {
                 <div id="assignment-calendar-left" className="col-1 text-center">
                     <i className='fas fa-arrow-alt-circle-left assignment-calendar-nav' onClick={this.props.monthBack.bind(this)} />
                 </div>
-                <div id="assignment-calendar-month-year" className="col-5 text-center">{this.monthYear}</div>
+                <div id="assignment-calendar-month-year" className="col-5 text-center">{this.props.monthYear}</div>
                 <div id="assignment-calendar-right" className="col-1 text-center">
                     <i className="fas fa-chevron-circle-right assignment-calendar-nav" onClick={this.props.monthForward.bind(this)} />
                 </div>

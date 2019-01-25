@@ -14,14 +14,15 @@ code {
 }
 
 .assignment-calendar-day a:hover {
-  /*background-color: lightblue;*/
   text-decoration: none;
-  /*font-weight: bolder;*/
 }
 
 .assignment-calendar-block-inactive {
   color: lightgray;
   text-decoration: none;
+  cursor: pointer;
+  background: white;
+  border: 0;
 }
 .assignment-calendar-block-active {
   color: black;
