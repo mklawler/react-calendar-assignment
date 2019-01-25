@@ -41,10 +41,6 @@ class AssignmentCalendar extends Component {
     let result = AssignmentCalendar.monthChange(0);
     this.monthUpdate(result.month, result.year);
 
-    // Retrieve month data from API and populate calendar
-    //AssignmentCalendar.fetchMonth(null, this.populateCalendar.bind(this)).catch(err => errorHandler.logError(err.reason)).then();
-
-
   }
 
   // Populates the blank calendar grid with the correct dates and contents for the given month
@@ -129,7 +125,6 @@ class AssignmentCalendar extends Component {
 
 
       // Push content into array for block
-      //blocks.push(<div id={"assignment-calendar-block"+x} className='col-1 border border-dark assignment-calendar-block' key={x}><div id={"assignment-calendar-block"+x+"_Day"} className='assignment-calendar-day'></div><div id={"assignment-calendar-block"+x+"_Note"}></div></div>);
       blocks.push(<AssignmentCalendarBlock key={'key-'+a} number={a} note={calendarBlockNote} date={calendarBlockDate}/>);
 
 
